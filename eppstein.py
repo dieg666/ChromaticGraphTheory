@@ -1,20 +1,53 @@
 import networkx as nx
+import itertools as I
 import utils
+def c(n,v):
+    for i in range(1,n+1):
+        for p in I.product(range(i),repeat=n):
+            if(0==len([x for x in v if(p[x[0]]==p[x[1]])])):
+                return i
+def convert(G,L):
+    k = 0
+    L2 = L.copy()
+    for i in list(G.nodes()):
+        if k == i:
+            pass
+        for l in L2:
+            l = list(l)
+            if l[0] == i:
+                left = k
+            if l[1] == i:
+                l[1] = k
+            l = tuple(l)
+        k += 1
+    return L2
 def eppstein(G):
     X = {}
     for S in utils.subsets_of_graph(G):
+        G2 = utils.createGraph(S, G)
+
+        n = G2.number_of_nodes()
+        l =  list(G2.edges())
+        l = convert(G2,l)
+        print(n)
+        print(l)
+        print()
+    for S in utils.subsets_of_graph(G):
+        break
         #print("Actual S iteration: "+ str(S))
         # TODO check better naming of remove
-        S2 = utils.createGraph(S,G)
-        X[str(S2.nodes())] = len(S)
+        substraction = [item for item in G.nodes() if item not in S]
+        S2 = utils.createGraph(substraction,G)
+        X[str(S)] = len(S)
         for I in utils.get_max_independent_set(S2):
-            substract = utils.diff(S,I)
-            X[str(S)] = min(X[str(S)],X[str(substract)] + 1)
+            addition = utils.add(S,I)
+            if not str(addition) in X:
+                X[str(addition)] = len(addition)
+            X[str(addition)] = min(X[str(S)],X[str(addition)] + 1)
     return X[str(list(G.nodes()))]
-
 correct = 0
 wrong = 0
-for i in range(1,150):
+for i in range(5,6):
     G = nx.read_gpickle("data/graph"+'{0:03}'.format(i)+".gpickle")
     x = eppstein(G)
     if x != G.graph["Chromatic number"]:
@@ -26,11 +59,6 @@ for i in range(1,150):
         correct += 1
 
 import itertools as I
-def c(n,v):
-    for i in range(1,n+1):
-        for p in I.product(range(i),repeat=n):
-            if(0==len([x for x in v if(p[x[0]]==p[x[1]])])):
-                return i
 
 #G = nx.read_gpickle("test/graph022.gpickle")
 #A = nx.to_numpy_matrix(G)

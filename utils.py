@@ -7,7 +7,16 @@ def diff(S,I):
     for s in S:
         if s not in I:
             l.append(s)
+        return l
+def add(S,I):
+    l = []
+    for s in S:
+        l.append(s)
+    for i in I:
+        if not i in l:
+            l.append(i)
     return l
+
 def createGraph(S,G):
     G2 = G.copy()
     for i in range(G.number_of_nodes()):
