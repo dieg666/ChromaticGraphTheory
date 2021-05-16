@@ -1,11 +1,6 @@
 import networkx as nx
 import itertools as I
 import utils
-def c(n,v):
-    for i in range(1,n+1):
-        for p in I.product(range(i),repeat=n):
-            if(0==len([x for x in v if(p[x[0]]==p[x[1]])])):
-                return i
 def convert(G,L):
     k = 0
     L2 = L.copy()
@@ -24,18 +19,6 @@ def convert(G,L):
 def eppstein(G):
     X = {}
     for S in utils.subsets_of_graph(G):
-        G2 = utils.createGraph(S, G)
-
-        n = G2.number_of_nodes()
-        l =  list(G2.edges())
-        l = convert(G2,l)
-        print(n)
-        print(l)
-        print()
-    for S in utils.subsets_of_graph(G):
-        break
-        #print("Actual S iteration: "+ str(S))
-        # TODO check better naming of remove
         substraction = [item for item in G.nodes() if item not in S]
         S2 = utils.createGraph(substraction,G)
         X[str(S)] = len(S)
