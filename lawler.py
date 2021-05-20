@@ -14,11 +14,8 @@ def lawler(G):
 
 correct = 0
 wrong = 0
-for i in range(5,6):
+for i in range(1,150):
     G = nx.read_gpickle("data/graph"+'{0:03}'.format(i)+".gpickle")
-    print(G.nodes())
-    for i in G.edges():
-        print(list(i))
     x = lawler(G)
     if x != G.graph["Chromatic number"]:
         print(str(x)+" vs "+str(G.graph["Chromatic number"]))

@@ -1,0 +1,11 @@
+999 vs 5
+WRONG:: test/graph005.gpickle
+999 vs 5
+WRONG:: test/graph006.gpickle
+999 vs 4
+WRONG:: test/graph007.gpickle
+999 vs 3
+WRONG:: test/graph008.gpickle
+999 vs 4
+WRONG:: test/graph009.gpickle
+

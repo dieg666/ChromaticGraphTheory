@@ -1,48 +1,48 @@
 import networkx as nx
 import itertools as I
 import utils
-def convert(G,L):
-    k = 0
-    L2 = L.copy()
-    for i in list(G.nodes()):
-        if k == i:
-            pass
-        for l in L2:
-            l = list(l)
-            if l[0] == i:
-                left = k
-            if l[1] == i:
-                l[1] = k
-            l = tuple(l)
-        k += 1
-    return L2
+import math
+import sys
+import grinpy as gp
 def eppstein(G):
     X = {}
     for S in utils.subsets_of_graph(G):
-        substraction = [item for item in G.nodes() if item not in S]
-        S2 = utils.createGraph(substraction,G)
-        X[str(S)] = len(S)
-        for I in utils.get_max_independent_set(S2):
-            addition = utils.add(S,I)
-            if not str(addition) in X:
-                X[str(addition)] = len(addition)
-            X[str(addition)] = min(X[str(S)],X[str(addition)] + 1)
+        S2 = utils.createGraph(S, G)
+        X[str(S)] = 999
+        chromatic_number = gp.chromatic_number(S2)
+        if chromatic_number == 3:
+            X[str(S2.nodes())] == 3
+        elif chromatic_number == 2:
+            X[str(S2.nodes())] == 2
+        elif chromatic_number == 1:
+            X[str(S2.nodes())] == 1
+    for S in utils.subsets_of_graph(G):
+        if 3 <= X[str(S)] < 999:
+            substraction = utils.diff(list(G.nodes()), S)
+            S2 = utils.createGraph(substraction,G)
+            for I in utils.get_max_independent_set(S2):
+                if len(I) >= (len(S)/ X[str(S)]):
+                    addition = utils.add(S,I)
+                    addition.sort()
+                    X[str(addition)] = min(X[str(S)]+1,X[str(addition)])
     return X[str(list(G.nodes()))]
 correct = 0
 wrong = 0
-for i in range(5,6):
+output = ""
+for i in range(5,10):
     G = nx.read_gpickle("data/graph"+'{0:03}'.format(i)+".gpickle")
     x = eppstein(G)
     if x != G.graph["Chromatic number"]:
-        print(str(x)+" vs "+str(G.graph["Chromatic number"]))
-        print("WRONG:: test/graph"+'{0:03}'.format(i)+".gpickle")
+        output += str(x)+" vs "+str(G.graph["Chromatic number"])+"\n"
+        output += "WRONG:: test/graph"+'{0:03}'.format(i)+".gpickle\n"
         wrong += 1
     else:
-        print("RIGHT:: test/graph"+'{0:03}'.format(i)+".gpickle")
+        output += "RIGHT:: test/graph"+'{0:03}'.format(i)+".gpickle"+"\n"
         correct += 1
 
-import itertools as I
-
+    with open('eppsteinOutput.txt', 'w') as f:
+        sys.stdout = f # Change the standard output to the file we created.
+        print(output)
 #G = nx.read_gpickle("test/graph022.gpickle")
 #A = nx.to_numpy_matrix(G)
 #print(A)
