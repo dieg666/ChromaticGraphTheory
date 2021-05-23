@@ -1,4 +1,5 @@
 import networkx as nx
+import sys
 import utils
 def lawler(G):
     X = {}
@@ -14,33 +15,18 @@ def lawler(G):
 
 correct = 0
 wrong = 0
+output = ""
 for i in range(1,150):
     G = nx.read_gpickle("data/graph"+'{0:03}'.format(i)+".gpickle")
     x = lawler(G)
     if x != G.graph["Chromatic number"]:
-        print(str(x)+" vs "+str(G.graph["Chromatic number"]))
-        print("WRONG:: test/graph"+'{0:03}'.format(i)+".gpickle")
+        output += str(x)+" vs "+str(G.graph["Chromatic number"])+"\n"
+        output += "WRONG:: test/graph"+'{0:03}'.format(i)+".gpickle\n"
         wrong += 1
     else:
-        print("RIGHT:: test/graph"+'{0:03}'.format(i)+".gpickle")
+        output += "RIGHT:: test/graph"+'{0:03}'.format(i)+".gpickle"+"\n"
         correct += 1
 
-import itertools as I
-def c(n,v):
-    for i in range(1,n+1):
-        for p in I.product(range(i),repeat=n):
-            if(0==len([x for x in v if(p[x[0]]==p[x[1]])])):
-                return i
-
-#G = nx.read_gpickle("test/graph022.gpickle")
-#A = nx.to_numpy_matrix(G)
-#print(A)
-#print(c(G.number_of_nodes(), list(G.edges())))
-#pos = nx.spring_layout(G)
-#nx.draw_networkx_nodes(G, pos, cmap=plt.get_cmap('jet'),
-#                        node_size = 500)
-#nx.draw_networkx_labels(G, pos)
-#nx.draw_networkx_edges(G, pos, edge_color='r', arrows=True)
-#nx.draw_networkx_edges(G, pos, arrows=False)
-#plt.show()
-#plt.draw()
+    with open('lawlerOutput.txt', 'w') as f:
+        sys.stdout = f # Change the standard output to the file we created.
+        print(output)

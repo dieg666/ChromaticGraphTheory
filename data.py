@@ -6,10 +6,9 @@ import random
 n = 10
 p = 0.6666
 i = 1
-for _ in range(150):
+for _ in range(1):
     p = random.uniform(0.5, 0.95)
     n = random.randint(4,5)
-    n = 8
     G = erdos_renyi_graph(n, p)
     if not nx.is_connected(G):
         print("Skipping graph not connected")
@@ -17,7 +16,7 @@ for _ in range(150):
     a = grinpy.chromatic_number(G)
     # chromatic number accesed with G.graph["Chromatic number"]
     G.graph = {'Chromatic number': a}
-    nx.write_gpickle(G, "test/graph"+'{0:03}'.format(i)+".gpickle")
+    nx.write_gpickle(G, "data/graph"+'{0:03}'.format(i)+".gpickle")
     i = i + 1
 #pos = nx.spring_layout(G)
 #nx.draw_networkx_nodes(G, pos, cmap=plt.get_cmap('jet'),
