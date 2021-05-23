@@ -1,0 +1,3 @@
+RIGHT:: test/graph001.gpickle
+RIGHT:: test/graph002.gpickle
+

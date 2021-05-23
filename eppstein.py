@@ -1,6 +1,7 @@
 import networkx as nx
 import itertools as I
 import utils
+import time
 import math
 import sys
 import grinpy as gp
@@ -8,20 +9,17 @@ def eppstein(G):
     X = {}
     for S in utils.subsets_of_graph(G):
         S2 = utils.createGraph(S, G)
-        X[str(S)] = 999
         chromatic_number = gp.chromatic_number(S2)
-        if chromatic_number == 3:
-            X[str(S2.nodes())] == 3
-        elif chromatic_number == 2:
-            X[str(S2.nodes())] == 2
-        elif chromatic_number == 1:
-            X[str(S2.nodes())] == 1
+        X[str(list(S2.nodes()))] = 999
+        if chromatic_number <= 3:
+            X[str(list(S2.nodes()))] = chromatic_number
     for S in utils.subsets_of_graph(G):
-        if 3 <= X[str(S)] < 999:
+        if  3<= X[str(S)]:
             substraction = utils.diff(list(G.nodes()), S)
             S2 = utils.createGraph(substraction,G)
+            limit = len(S) / X[str(S)]
             for I in utils.get_max_independent_set(S2):
-                if len(I) >= (len(S)/ X[str(S)]):
+                if len(I) <= limit:
                     addition = utils.add(S,I)
                     addition.sort()
                     X[str(addition)] = min(X[str(S)]+1,X[str(addition)])
@@ -29,7 +27,8 @@ def eppstein(G):
 correct = 0
 wrong = 0
 output = ""
-for i in range(5,10):
+
+for i in range(1,150):
     G = nx.read_gpickle("data/graph"+'{0:03}'.format(i)+".gpickle")
     x = eppstein(G)
     if x != G.graph["Chromatic number"]:
