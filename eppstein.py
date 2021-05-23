@@ -24,6 +24,7 @@ def eppstein(G):
                     addition.sort()
                     X[str(addition)] = min(X[str(S)]+1,X[str(addition)])
     return X[str(list(G.nodes()))]
+
 correct = 0
 wrong = 0
 output = ""
@@ -42,15 +43,3 @@ for i in range(1,150):
     with open('eppsteinOutput.txt', 'w') as f:
         sys.stdout = f # Change the standard output to the file we created.
         print(output)
-#G = nx.read_gpickle("test/graph022.gpickle")
-#A = nx.to_numpy_matrix(G)
-#print(A)
-#print(c(G.number_of_nodes(), list(G.edges())))
-#pos = nx.spring_layout(G)
-#nx.draw_networkx_nodes(G, pos, cmap=plt.get_cmap('jet'),
-#                        node_size = 500)
-#nx.draw_networkx_labels(G, pos)
-#nx.draw_networkx_edges(G, pos, edge_color='r', arrows=True)
-#nx.draw_networkx_edges(G, pos, arrows=False)
-#plt.show()
-#plt.draw()
